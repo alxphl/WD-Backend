@@ -15,6 +15,8 @@ namespace WD.Entities
         public double Bank { get; set; }
         public int BattleCoins { get; set; }
         public int Coins { get; set; }
+        public bool BattleMode { get; set; }
+        public bool AutoBattleMode { get; set; }
 
         public User(string id)
         {
@@ -26,6 +28,8 @@ namespace WD.Entities
             BattleCoins = 0;
             Coins = 10;
             Token = "";
+            BattleMode = false;
+            AutoBattleMode = false;
 
 
         }
