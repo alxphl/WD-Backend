@@ -10,28 +10,29 @@ namespace WD.Entities
         public string Token { get; set; }
         public double WinRate { get; set; }
         public double LostRate { get; set; }
+        public int Losses { get; set; }
+        public int Wins { get; set; }
         public int WorldDominationRank { get; set; }
         public TearEnum Tear { get; set; }
         public double Bank { get; set; }
         public int BattleCoins { get; set; }
         public int Coins { get; set; }
         public bool BattleMode { get; set; }
-        public bool AutoBattleMode { get; set; }
+        public LocationCoords Location { get; set; }
 
         public User(string id)
         {
             PlayId = id;
             WinRate = 50;
             LostRate = 50;
+            Wins = 0;
+            Losses = 0;
             Tear = TearEnum.None;
             Bank = 0;
             BattleCoins = 0;
             Coins = 10;
             Token = "";
             BattleMode = false;
-            AutoBattleMode = false;
-
-
         }
     }
 
@@ -41,5 +42,11 @@ namespace WD.Entities
         Silver = 1,
         Gold = 2,
         Platinum = 3,
+    }
+
+    public class LocationCoords
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

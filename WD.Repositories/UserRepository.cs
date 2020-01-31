@@ -30,6 +30,32 @@ namespace WD.Repositories
 
         }
 
+        public async Task<User> BattleModeHandler(string PlayId, int BattleCoins, bool BattleMode, LocationCoords location)
+        {
+            var Users = await GetUsers(x => x.PlayId != null);
+            var user = Users.Where(x => x.PlayId == PlayId).FirstOrDefault();
+            if (user != null)
+            {
+                if (BattleMode == true)
+                {
+                    user.BattleMode = true;
+                    user.BattleCoins = BattleCoins;
+                    user.Coins = user.Coins - BattleCoins;
+                    user.Location = location;
+                    await _context.Users.FindOneAndReplaceAsync(x => x.PlayId == PlayId, user);
+                }
+                else
+                {
+                    user.BattleMode = false;
+                    user.BattleCoins = user.BattleCoins - BattleCoins;
+                    user.Coins = user.Coins + BattleCoins;
+                    user.Location = location;
+                    await _context.Users.FindOneAndReplaceAsync(x => x.PlayId == PlayId, user);
+                }
+            }
+            return user;
+        }
+
         public async Task<List<User>> GetUsers(Expression<Func<User, bool>> expr) =>
             (await _context.Users.FindAsync(expr)).ToList();
 
