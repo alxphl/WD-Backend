@@ -36,7 +36,7 @@ namespace WD.Web.Controllers
         // POST: api/Battle
         [HttpPost("BattleMode")]
         public void Post([FromBody] BattleModeDTO battleModeDto)=>
-            UserRepository.BattleModeHandler(battleModeDto.PlayId, battleModeDto.BattleCoins, battleModeDto.BattleMode,battleModeDto.Location);
+            UserRepository.BattleModeHandler(battleModeDto.PlayId, battleModeDto.BattleLife, battleModeDto.BattleStrength, battleModeDto.BattleMode,battleModeDto.Location);
 
         // PUT: api/Battle/5
         [HttpPut("{id}")]

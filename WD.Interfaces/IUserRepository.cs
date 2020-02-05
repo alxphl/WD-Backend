@@ -13,6 +13,6 @@ namespace WD.Interfaces
         Task<List<User>> GetUsers(Expression<Func<User, bool>> expr);
         Task<User> CreateUser(string playId);
         Task Delete(User user);
-        Task<User> BattleModeHandler(string PlayId, int BattleCoins, bool BattleMode, LocationCoords location);
+        Task<User> BattleModeHandler(string PlayId, int BattleCoins, int battleStrength, bool BattleMode, LocationCoords location);
     }
 }

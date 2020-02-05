@@ -30,7 +30,7 @@ namespace WD.Repositories
 
         }
 
-        public async Task<User> BattleModeHandler(string PlayId, int BattleCoins, bool BattleMode, LocationCoords location)
+        public async Task<User> BattleModeHandler(string PlayId, int battleLife, int battleStrength, bool BattleMode, LocationCoords location)
         {
             var Users = await GetUsers(x => x.PlayId != null);
             var user = Users.Where(x => x.PlayId == PlayId).FirstOrDefault();
@@ -39,16 +39,22 @@ namespace WD.Repositories
                 if (BattleMode == true)
                 {
                     user.BattleMode = true;
-                    user.BattleCoins = BattleCoins;
-                    user.Coins = user.Coins - BattleCoins;
+                    user.BattleLife = battleLife;
+                    user.Life = user.Life - battleLife;
+                    user.BattleStrength = battleStrength;
+                    user.Strength = user.Strength - battleStrength;
                     user.Location = location;
                     await _context.Users.FindOneAndReplaceAsync(x => x.PlayId == PlayId, user);
                 }
                 else
                 {
                     user.BattleMode = false;
-                    user.BattleCoins = user.BattleCoins - BattleCoins;
-                    user.Coins = user.Coins + BattleCoins;
+                    user.BattleLife = user.BattleLife - battleLife;
+                    user.Life = user.Life + battleLife;
+
+                    user.BattleStrength = user.BattleStrength - battleStrength;
+                    user.Strength = user.Strength + battleStrength;
+
                     user.Location = location;
                     await _context.Users.FindOneAndReplaceAsync(x => x.PlayId == PlayId, user);
                 }

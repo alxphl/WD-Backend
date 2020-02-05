@@ -15,8 +15,11 @@ namespace WD.Entities
         public int WorldDominationRank { get; set; }
         public TearEnum Tear { get; set; }
         public double Bank { get; set; }
-        public int BattleCoins { get; set; }
-        public int Coins { get; set; }
+        public int BattleLife { get; set; }
+        public int Life { get; set; }
+
+        public int BattleStrength { get; set; }
+        public int Strength { get; set; }
         public bool BattleMode { get; set; }
         public LocationCoords Location { get; set; }
 
@@ -29,8 +32,10 @@ namespace WD.Entities
             Losses = 0;
             Tear = TearEnum.None;
             Bank = 0;
-            BattleCoins = 0;
-            Coins = 10;
+            BattleLife = 0;
+            Life = 10;
+            BattleStrength = 0;
+            Strength = 0;
             Token = "";
             BattleMode = false;
         }
