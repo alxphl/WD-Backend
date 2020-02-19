@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using WD.Entities;
 using WD.Interfaces;
 using WD.Repositories;
+using World_Domination.Hubs;
 
 namespace World_Domination
 {
@@ -74,6 +75,7 @@ namespace World_Domination
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapHub<BattleHub>("/battle");
+                endpoints.MapHub<UserHub>("/user");
             });
 
 
