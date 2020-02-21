@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using WD.Entities;
 using WD.Entities.DTO;
 using WD.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace World_Domination
 {
+   
     public class BattleHub: Hub
     {
         readonly IUserRepository UserRepository;
@@ -22,6 +25,7 @@ namespace World_Domination
             Clients.All.SendAsync("SendToChannel", name, message);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HubMethodName("BattleHandler")]
         public async Task<User> BattleHandler(BattleModeDTO battleModeDto)
         {

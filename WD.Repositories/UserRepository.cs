@@ -15,9 +15,11 @@ namespace WD.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly MongoContext _context;
-        public UserRepository(IOptions<DBSettings> settings)
+        private readonly ISecurityService SecurityService;
+        public UserRepository(IOptions<DBSettings> settings, ISecurityService securityService)
         {
             _context=new MongoContext(settings);
+            SecurityService = securityService;
         }
         public async Task<bool> IsExists(Expression<Func<User, bool>> expr) =>
             await _context.Users.CountDocumentsAsync(expr) > 0;
@@ -29,7 +31,26 @@ namespace WD.Repositories
           return user;
 
         }
+        public async Task<User> GenerateJwt(string userId)
+        {
+            
+            var user =await GetByPlayIdSync(userId);
+            if (user != null)
+            {
+              user=SecurityService.GenerateJWT(user);
+              await UpdateToken(user);
+              return user;
+            }
 
+            return null;
+
+        }
+
+        public async Task<User> UpdateToken(User user)
+        {
+            await _context.Users.ReplaceOneAsync(x => x.PlayId == user.PlayId, user);
+            return user;
+        }
         public async Task<User> BattleModeHandler(string PlayId, int battleLife, int battleStrength, bool BattleMode, LocationCoords location)
         {
             var Users = await GetUsers(x => x.PlayId != null);

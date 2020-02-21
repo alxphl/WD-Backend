@@ -18,10 +18,10 @@ namespace World_Domination.Hubs
         }
 
         [HubMethodName("SignInUp")]
-        public async Task<User> SignInUp(string connectionId, string PlayId)
+        public async Task<User> SignInUp(string PlayId)
         {
 
-            var user = await UserRepository.GetByPlayIdSync(PlayId);
+            var user = await UserRepository.GenerateJwt(PlayId);
             if (user != null)
             {
                 Clients.Caller.SendAsync("UserFill", new UserDTO(user.Token,user.WinRate,user.LostRate,user.Losses,user.Wins,user.WorldDominationRank,user.Tear,user.Bank,user.Life,user.Strength)); return user;

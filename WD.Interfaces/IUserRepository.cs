@@ -14,5 +14,7 @@ namespace WD.Interfaces
         Task<User> CreateUser(string playId);
         Task Delete(User user);
         Task<User> BattleModeHandler(string PlayId, int BattleCoins, int battleStrength, bool BattleMode, LocationCoords location);
+        Task<User> UpdateToken(User user);
+        Task<User> GenerateJwt(string userId);
     }
 }
