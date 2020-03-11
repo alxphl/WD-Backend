@@ -38,6 +38,7 @@ namespace World_Domination
         public async Task<User> BattleHandler2(BattleModeDTO battleModeDto)
         {
             var user = await UserRepository.BattleModeHandler(battleModeDto.PlayId, battleModeDto.BattleLife, battleModeDto.BattleStrength, battleModeDto.BattleMode, battleModeDto.Location);
+           await Clients.Caller.SendAsync("BattleFill",new BattleModeHandlerDTO(user.Life,user.BattleLife,user.Strength,user.BattleStrength,user.BattleMode));
             return user;
 
         }

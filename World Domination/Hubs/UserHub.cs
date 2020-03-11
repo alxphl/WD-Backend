@@ -29,13 +29,13 @@ namespace World_Domination.Hubs
             if (user != null)
             {
                 user.Token=JwtAuthorization.GenerateToken(PlayId, TokenConfiguration);
-                Clients.Caller.SendAsync("UserFill", new UserDTO(user.Token,user.WinRate,user.LostRate,user.Losses,user.Wins,user.WorldDominationRank,user.Tear,user.Bank,user.Life,user.Strength)); return user;
+                await Clients.Caller.SendAsync("UserFill", new UserDTO(user.Token,user.WinRate,user.LostRate,user.Losses,user.Wins,user.WorldDominationRank,user.Tear,user.Bank,user.Life,user.Strength)); return user;
             }
             else
             {
                 var User = await UserRepository.CreateUser(PlayId);
                 User.Token = JwtAuthorization.GenerateToken(PlayId, TokenConfiguration);
-                Clients.Caller.SendAsync("UserFill", new UserDTO(user.Token, user.WinRate, user.LostRate, user.Losses, user.Wins, user.WorldDominationRank, user.Tear, user.Bank, user.Life, user.Strength));
+                await Clients.Caller.SendAsync("UserFill", new UserDTO(user.Token, user.WinRate, user.LostRate, user.Losses, user.Wins, user.WorldDominationRank, user.Tear, user.Bank, user.Life, user.Strength));
                 return User;
             }
         }

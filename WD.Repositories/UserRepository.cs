@@ -60,23 +60,28 @@ namespace WD.Repositories
             {
                 if (BattleMode == true)
                 {
-                    user.BattleMode = true;
-                    user.BattleLife = battleLife;
-                    user.Life = user.Life - battleLife;
-                    user.BattleStrength = battleStrength;
-                    user.Strength = user.Strength - battleStrength;
-                    user.Location = location;
-                    await _context.Users.FindOneAndReplaceAsync(x => x.PlayId == PlayId, user);
+                    if (user.Life - battleLife >= 0 && user.Strength - battleStrength >= 0)
+                    {
+                        user.BattleMode = true;
+                        user.BattleLife = battleLife;
+                        user.Life = user.Life - battleLife;
+                        user.BattleStrength = battleStrength;
+                        user.Strength = user.Strength - battleStrength;
+                        user.Location = location;
+                        await _context.Users.FindOneAndReplaceAsync(x => x.PlayId == PlayId, user);
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 else
                 {
                     user.BattleMode = false;
-                    user.BattleLife = user.BattleLife - battleLife;
-                    user.Life = user.Life + battleLife;
-
-                    user.BattleStrength = user.BattleStrength - battleStrength;
-                    user.Strength = user.Strength + battleStrength;
-
+                    user.Life = user.Life + user.BattleLife;
+                    user.BattleLife = 0;
+                    user.Strength = user.Strength + user.BattleStrength;
+                    user.BattleStrength = 0;
                     user.Location = location;
                     await _context.Users.FindOneAndReplaceAsync(x => x.PlayId == PlayId, user);
                 }
