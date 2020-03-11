@@ -37,8 +37,9 @@ namespace WD.Repositories
             var user =await GetByPlayIdSync(userId);
             if (user != null)
             {
-              user=SecurityService.GenerateJWT(user);
-              await UpdateToken(user);
+
+             // user=SecurityService.GenerateJWT(user);
+             // await UpdateToken(user);
               return user;
             }
 

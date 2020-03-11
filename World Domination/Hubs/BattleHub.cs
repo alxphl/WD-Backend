@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace World_Domination
 {
-   
+
     public class BattleHub: Hub
     {
         readonly IUserRepository UserRepository;
@@ -25,11 +25,19 @@ namespace World_Domination
             Clients.All.SendAsync("SendToChannel", name, message);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HubMethodName("BattleHandler")]
         public async Task<User> BattleHandler(BattleModeDTO battleModeDto)
         {
             var user= await UserRepository.BattleModeHandler(battleModeDto.PlayId, battleModeDto.BattleLife, battleModeDto.BattleStrength, battleModeDto.BattleMode, battleModeDto.Location);
+            return user;
+
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HubMethodName("BattleHandler2")]
+        public async Task<User> BattleHandler2(BattleModeDTO battleModeDto)
+        {
+            var user = await UserRepository.BattleModeHandler(battleModeDto.PlayId, battleModeDto.BattleLife, battleModeDto.BattleStrength, battleModeDto.BattleMode, battleModeDto.Location);
             return user;
 
         }

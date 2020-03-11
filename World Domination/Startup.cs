@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,34 +54,37 @@ namespace World_Domination
                 options.Database
                     = Configuration.GetSection("MongoConnection:Database").Value;
             });
-            services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {x.Events=new JwtBearerEvents
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            var accessToken = context.Request.Query["access_token"];
-                            if (string.IsNullOrEmpty(accessToken) == false)
-                            {
-                                context.Token = accessToken;
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:Key"])),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                    };
-                });
+            /*  services.AddAuthentication(x =>
+                  {
+                      x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                      x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                  })
+                  .AddJwtBearer(x =>
+                  {x.Events=new JwtBearerEvents
+                      {
+                          OnMessageReceived = context =>
+                          {
+                              var accessToken = context.Request.Query["access_token"];
+                              if (string.IsNullOrEmpty(accessToken) == false)
+                              {
+                                  context.Token = accessToken;
+                              }
+                              return Task.CompletedTask;
+                          }
+                      };
+                      x.RequireHttpsMetadata = false;
+                      x.SaveToken = true;
+                      x.TokenValidationParameters = new TokenValidationParameters
+                      {
+                          ValidateIssuerSigningKey = true,
+                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:Key"])),
+                          ValidateIssuer = false,
+                          ValidateAudience = false,
+                      };
+                  });*/
+            services.AddSingleton<TokenConfiguration>();
+            services.AddTokenConfiguration(services.BuildServiceProvider().GetRequiredService<TokenConfiguration>());
+            services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ISecurityService, SecurityService>();
         }
